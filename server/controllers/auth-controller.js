@@ -1,6 +1,7 @@
 import { User } from "../models/user.js";
 import { encryptPassword } from "../utils/authentication.js";
 import { validate } from "../utils/validator.js";
+import bcrypt from "bcrypt";
 
 const loginRules = {
 	email: "required|email",
@@ -20,11 +21,15 @@ class AuthController {
 
 		if (!passes) return res.status(400).send(data);
 
-		let user = User.findOne({ email: data.email });
+		let user = await User.findOne({
+			$or: [{ email: data.email }, { username: data.email }],
+		});
 
 		if (!user) return res.status(400).send({ message: "User not found" });
 
-		if (user.password !== data.password)
+		let mathch = await bcrypt.compare(data.password, user.password);
+
+		if (!mathch)
 			return res.status(400).send({ message: "Invalid password" });
 
 		return res.send(user);
