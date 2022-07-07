@@ -21,7 +21,8 @@ export function Articles({ navigation }) {
 	async function getArticles() {
 		setIsFetching(true);
 		let data = await get("api/articles");
-		setArticles(data.reverse(0));
+
+		setArticles(data.data.reverse(0));
 		setIsFetching(false);
 	}
 

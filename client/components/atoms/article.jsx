@@ -35,7 +35,7 @@ export function renderArticle(navigation) {
 							marginTop: 20,
 						}}
 					>
-						By {item.creator.fullNames}
+						By {item._id}
 					</Text>
 				</View>
 			</TouchableOpacity>

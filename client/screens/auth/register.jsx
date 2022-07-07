@@ -10,16 +10,16 @@ import { post } from "../../utils/http";
 import { validate } from "../../utils/validator";
 
 export default function RegisterScreen({ navigation }) {
-	const [fullNames, setFullNames] = useState("");
+	const [names, setFullNames] = useState("");
 	const [username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
 	async function register() {
-		let data = { fullNames, username, email, password };
+		let data = { names, username, email, password };
 
 		let [passes, info] = validate(data, {
-			fullNames: "required",
+			names: "required",
 			username: "required",
 			email: "required|email",
 			password: "required",
@@ -33,13 +33,11 @@ export default function RegisterScreen({ navigation }) {
 		try {
 			let res = await post("api/auth/register", data);
 
-			if (res.password != undefined) {
-				Alert.alert("Success", "Registration Successful");
-				navigation.navigate("Login");
-			} else {
-				Alert.alert("Bad Request", "Check if your fields are valid");
-			}
-		} catch (error) {}
+			Alert.alert("Success", "Registration Successful");
+			navigation.navigate("Login");
+		} catch (error) {
+			Alert.alert(error.response.data, "User Already Registered");
+		}
 	}
 
 	return (

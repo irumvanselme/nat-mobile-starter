@@ -12,14 +12,14 @@ import { validate } from "../../utils/validator";
 import * as SecureStore from "expo-secure-store";
 
 export default function LoginScreen({ navigation }) {
-	const [login, setLogin] = useState("");
+	const [email, setLogin] = useState("");
 	const [password, setPassword] = useState("");
 
 	async function loginHandler() {
-		let data = { login, password };
+		let data = { email, password };
 
 		let [passes, info] = validate(data, {
-			login: "required",
+			email: "required",
 			password: "required",
 		});
 
@@ -29,16 +29,21 @@ export default function LoginScreen({ navigation }) {
 		}
 
 		try {
-			let res = await post("api/auth/signin", data);
+			let res = await post("api/auth/login", data);
 
-			if (res.status !== 403) {
-				await SecureStore.setItemAsync("token", res);
-				Alert.alert("Success", "Login Successful");
-				navigation.navigate("App");
+			await SecureStore.setItemAsync("token", res.data.token);
+			Alert.alert("Success", "Login Successful");
+			navigation.navigate("App");
+		} catch (error) {
+			if (error.response.status == 400) {
+				Alert.alert(
+					"Bad Request",
+					Object.values(error.response.data)[0][0]
+				);
 			} else {
-				Alert.alert("Invalid Credentials", "Check your credentials");
+				Alert.alert("Invalid Credentials", "Invalid Credentials");
 			}
-		} catch (error) {}
+		}
 	}
 
 	return (
@@ -54,7 +59,7 @@ export default function LoginScreen({ navigation }) {
 			</View>
 			<View style={{ marginTop: 30 }}>
 				<Input label="Email or username" handler={setLogin} />
-				<Input label="Password" handler={setPassword} />
+				<Input label="Password" handler={setPassword} password />
 			</View>
 			<Button title="Login" onPress={loginHandler} />
 			<View>

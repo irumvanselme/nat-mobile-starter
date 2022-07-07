@@ -3,6 +3,8 @@ import { encryptPassword } from "../utils/authentication.js";
 import { validate } from "../utils/validator.js";
 import bcrypt from "bcrypt";
 
+import jwt from "jsonwebtoken";
+
 const loginRules = {
 	email: "required|email",
 	password: "required",
@@ -25,14 +27,18 @@ class AuthController {
 			$or: [{ email: data.email }, { username: data.email }],
 		});
 
-		if (!user) return res.status(400).send({ message: "User not found" });
+		if (!user) return res.status(401).send({ message: "User not found" });
 
 		let mathch = await bcrypt.compare(data.password, user.password);
 
 		if (!mathch)
-			return res.status(400).send({ message: "Invalid password" });
+			return res.status(401).send({ message: "Invalid password" });
 
-		return res.send(user);
+		let token = jwt.sign({ id: user._id }, "my_No_KeY", {
+			expiresIn: 60 * 60,
+		});
+
+		return res.send({ user, token });
 	}
 
 	async register(req, res) {
@@ -40,7 +46,14 @@ class AuthController {
 
 		if (!passes) return res.status(400).send(data);
 
-		data.password = await encryptPassword(data.password);
+		let existingUser = await User.exists({
+			$or: [{ username: data.username }, { email: data.email }],
+		});
+
+		if (existingUser)
+			return res.status(400).send("User already registered");
+
+		if (existingUser) data.password = await encryptPassword(data.password);
 
 		console.log(data);
 
