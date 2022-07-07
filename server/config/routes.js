@@ -1,5 +1,6 @@
 import { Router } from "express";
 
+import articleController from "../controllers/article-controller.js";
 import authController from "../controllers/auth-controller.js";
 import todoController from "../controllers/todo-controller.js";
 import userController from "../controllers/user-controller.js";
@@ -9,6 +10,12 @@ const router = Router();
 router.get("/", (req, res) => {
 	return res.send("App not working");
 });
+
+/**
+ * Article Controller related endpoints
+ */
+router.get("/api/articles", articleController.all);
+router.post("/api/articles", articleController.create);
 
 /**
  * Auth Conroller related Endpoints

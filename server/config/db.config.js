@@ -13,3 +13,4 @@ mongoose
 
 import "../models/user.js";
 import "../models/todo.js";
+import "../models/article.js";
