@@ -10,7 +10,7 @@ export class Application {
 		app.use(router);
 
 		app.listen(process.env.PORT, () => {
-			console.log("App running on port");
+			console.log("App running on port " + process.env.PORT);
 		});
 	}
 }

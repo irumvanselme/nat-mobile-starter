@@ -35,7 +35,9 @@ class AuthController {
 
 		if (!passes) return res.status(400).send(data);
 
-		data.password = encryptPassword(data.password);
+		data.password = await encryptPassword(data.password);
+
+		console.log(data);
 
 		let user = await User.create(data);
 
