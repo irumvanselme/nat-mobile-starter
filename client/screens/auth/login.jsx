@@ -1,9 +1,8 @@
-import { useContext, useState } from "react";
-import { Alert, AsyncStorage, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Alert, TouchableOpacity, View } from "react-native";
 import { Button } from "../../components/theme/button";
 import { Input } from "../../components/theme/input";
 import Text from "../../components/theme/text";
-import { AppContext } from "../../contexts/app-context";
 import { Screen } from "../../layouts/screen";
 import { Colors } from "../../utils/constants";
 import { post } from "../../utils/http";

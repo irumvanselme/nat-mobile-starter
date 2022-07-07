@@ -7,7 +7,7 @@ import { useState } from "react";
 import { validate } from "../utils/validator";
 import { post } from "../utils/http";
 
-export default function NewArticle() {
+export default function NewArticle({ navigation }) {
 	const [title, setTitle] = useState("");
 	const [body, setBody] = useState("");
 	const [summary, setSummary] = useState("");
@@ -29,8 +29,9 @@ export default function NewArticle() {
 		try {
 			let res = await post("api/articles", data);
 
-			if (JSON.parse(res).title == title) {
+			if (res.status == 201) {
 				Alert.alert("Success", "Article created successfully");
+				navigation.navigate("App");
 			} else {
 				Alert.alert("Bad Request", "Check if your fields are valid");
 			}

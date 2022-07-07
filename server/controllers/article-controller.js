@@ -15,7 +15,7 @@ class ArticleController {
 		}
 
 		let article = await Article.create(req.body);
-		return res.send(article);
+		return res.status(201).send(article);
 	}
 }
 

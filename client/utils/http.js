@@ -2,15 +2,17 @@ import * as SecureStore from "expo-secure-store";
 
 import axios from "axios";
 
-export async function get(url) {
-	let res = await axios.get("http://192.168.0.141:8000/" + url);
+const ip_address = "192.168.1.56";
+
+export async function get(url, options) {
+	let res = await axios.get(`http://${ip_address}:8000/${url}`, options);
 	return res;
 }
 
 export async function post(url, data) {
 	let token = await SecureStore.getItemAsync("token");
 
-	let res = await axios.post("http://192.168.0.141:8000/" + url, data, {
+	let res = await axios.post(`http://${ip_address}:8000/${url}`, data, {
 		headers: {
 			Authorization: "Bearer " + token,
 		},

@@ -12,8 +12,7 @@ import RegisterScreen from "./screens/auth/register";
 import React, { useContext } from "react";
 import { AppContext } from "./contexts/app-context";
 import NewArticle from "./screens/new-article";
-
-const RootStack = createStackNavigator();
+import { LoadingScreen } from "./screens/loading";
 
 export const RootNavigator = () => {
 	const { isLoggedIn } = useContext(AppContext);
@@ -33,12 +32,14 @@ function AuthNavigator() {
 				cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 			}}
 		>
+			<AuthStack.Screen name="Loading" component={LoadingScreen} />
 			<AuthStack.Screen name="Login" component={LoginScreen} />
 			<AuthStack.Screen name="Register" component={RegisterScreen} />
 			<AuthStack.Screen
 				name="App"
 				options={{
 					headerLeft: null,
+					gestureEnabled: false,
 				}}
 				component={AppNavigator}
 			/>
@@ -48,7 +49,12 @@ function AuthNavigator() {
 
 const Stack = createStackNavigator();
 
-function AppNavigator() {
+function AppNavigator({ navigation }) {
+	navigation.addListener("beforeRemove", (e) => {
+		// console.log("Yello no thing 1");
+		e.preventDefault();
+	});
+
 	return (
 		<Stack.Navigator
 			screenOptions={{

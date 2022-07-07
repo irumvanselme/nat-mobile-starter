@@ -53,13 +53,17 @@ class AuthController {
 		if (existingUser)
 			return res.status(400).send("User already registered");
 
-		if (existingUser) data.password = await encryptPassword(data.password);
+		data.password = await encryptPassword(data.password);
 
 		console.log(data);
 
 		let user = await User.create(data);
 
 		return res.send(user);
+	}
+
+	async profile(req, res) {
+		return res.send(req.user);
 	}
 }
 

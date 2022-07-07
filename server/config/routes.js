@@ -4,6 +4,7 @@ import articleController from "../controllers/article-controller.js";
 import authController from "../controllers/auth-controller.js";
 import todoController from "../controllers/todo-controller.js";
 import userController from "../controllers/user-controller.js";
+import { authMiddleware } from "../middlewares/auth-middleware.js";
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.post("/api/articles", articleController.create);
  */
 router.post("/api/auth/login", authController.login);
 router.post("/api/auth/register", authController.register);
+router.get("/api/auth/profile", authMiddleware, authController.profile);
 
 /**
  * Users Conroller related Endpoints

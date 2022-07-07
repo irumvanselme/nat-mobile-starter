@@ -31,11 +31,12 @@ export default function RegisterScreen({ navigation }) {
 		}
 
 		try {
-			let res = await post("api/auth/register", data);
+			await post("api/auth/register", data);
 
 			Alert.alert("Success", "Registration Successful");
 			navigation.navigate("Login");
 		} catch (error) {
+			console.log(error.response.data);
 			Alert.alert(error.response.data, "User Already Registered");
 		}
 	}
